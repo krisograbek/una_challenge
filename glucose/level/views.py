@@ -26,11 +26,6 @@ class ResetDatabase(generics.ListAPIView):
     serializer_class = LevelSerializer
     queryset = Level.objects.all()
 
-    # @require_http_methods(["POST"])
-    # def reset(request):
-    # if request.method == "POST":
-    # get all csv files
-
     def post(self, request):
         filenames = os.listdir("./data/")
         filenames = [filename for filename in filenames if filename.endswith(".csv")]
