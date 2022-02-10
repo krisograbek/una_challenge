@@ -1,13 +1,14 @@
 import './App.css';
 import { useEffect, useState } from 'react';
+import TableComponent from './components/TableComponent';
 
 
 function App() {
-  const [currentValue, setCurrentValue] = useState([])
+  const [glucoseData, setGlucoseData] = useState([])
 
   useEffect(() => {
     fetch(`/api/v1/level`).then(res => res.json()).then(data => {
-      setCurrentValue(data)
+      setGlucoseData(data)
     })
   }, [])
 
@@ -22,12 +23,13 @@ function App() {
       .catch(error => console.log(error))
   }
 
-  console.log(currentValue.length)
+  console.log(glucoseData.length)
 
   return (
     <div>
       <button onClick={() => fetchData()}>Click</button>
-      <table>
+      <TableComponent data={glucoseData} />
+      {/* <table>
         <thead>
           <tr>
             <th>User</th>
@@ -37,7 +39,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {currentValue.map((value, i) => {
+          {glucoseData.map((value, i) => {
             return (
               <tr key={i}>
                 <td>
@@ -56,8 +58,7 @@ function App() {
             )
           })}
         </tbody>
-      </table>
-      <button onClick={() => fetchData()}>Click</button>
+      </table> */}
     </div>
   );
 }
