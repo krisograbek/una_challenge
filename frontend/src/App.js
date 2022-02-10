@@ -23,11 +23,27 @@ function App() {
       .catch(error => console.log(error))
   }
 
+
+  const fetchOther = () => {
+    const body = {
+      perPage: 20,
+      pages: 5
+    };
+    fetch(`/api/v1/level/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .catch(error => console.log(error))
+  }
   console.log(glucoseData.length)
 
   return (
     <div>
       <button onClick={() => fetchData()}>Click</button>
+      <button onClick={() => fetchOther()}>Fetch Something else</button>
       <TableComponent data={glucoseData} />
       {/* <table>
         <thead>

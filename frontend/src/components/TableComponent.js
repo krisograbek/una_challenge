@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 
 function TableComponent({ data }) {
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [page, setPage] = useState(0);
 
   const handleChangePage = (event, newPage) => {
@@ -52,7 +52,7 @@ function TableComponent({ data }) {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 25, 50]}
         component="div"
         count={data.length}
         rowsPerPage={rowsPerPage}

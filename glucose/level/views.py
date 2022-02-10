@@ -3,9 +3,11 @@ from .models import Level
 from .serializers import LevelSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
+from django.core.paginator import Paginator
 import csv
 import os
 import datetime as dt
+import json
 
 
 class LevelListCreate(generics.ListCreateAPIView):
@@ -16,9 +18,22 @@ class LevelListCreate(generics.ListCreateAPIView):
         user = self.request.query_params.get("user")
         start = self.request.query_params.get("start")
         stop = self.request.query_params.get("stop")
+        results_per_page = 25
+
         if user is not None:
             queryset = queryset.filter(user=user)
+        if self.request.query_params.get("per_page"):
+            results_per_page = self.request.query_params.get("per_page")
+
+        paginator = Paginator(queryset, results_per_page)
+        print(paginator.count, paginator.num_pages, paginator.page_range)
         return queryset
+
+    def post(self, request):
+        body_unicode = request.body.decode("utf-8")
+        body = json.loads(body_unicode)
+        print("POST REQUEST", body)
+        return Response(status=status.HTTP_200_OK)
 
 
 class ResetDatabase(generics.ListAPIView):
