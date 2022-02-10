@@ -35,17 +35,19 @@ function TableComponent({ data }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row, i) => (
-              <TableRow
-                key={row.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell align="right">{row.user}</TableCell>
-                <TableCell align="right">{row.timestamp}</TableCell>
-                <TableCell align="right">{row.measure_type}</TableCell>
-                <TableCell align="right">{row.glucose_level}</TableCell>
-              </TableRow>
-            ))}
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, i) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell align="right">{row.user}</TableCell>
+                  <TableCell align="right">{row.timestamp}</TableCell>
+                  <TableCell align="right">{row.measure_type}</TableCell>
+                  <TableCell align="right">{row.glucose_level}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
