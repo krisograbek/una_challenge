@@ -1,9 +1,8 @@
 from urllib import request
 from .models import Level
 from .serializers import LevelSerializer
-from rest_framework import generics
-from django.views.decorators.http import require_http_methods
-from django.http import HttpRequest
+from rest_framework import generics, status
+from rest_framework.response import Response
 import csv
 import os
 import datetime as dt
@@ -57,3 +56,4 @@ class ResetDatabase(generics.ListAPIView):
                             glucose_level=glucose_level,
                         )
                         level.save()
+        return Response(status=status.HTTP_201_CREATED)
