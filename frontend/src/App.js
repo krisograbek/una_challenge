@@ -1,7 +1,10 @@
 import './App.css';
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
 import { useEffect, useState } from 'react';
 import TableComponent from './components/TableComponent';
 import FilterPanel from './components/FilterPanel';
+import InfoPanel from './components/InfoPanel';
 
 
 function App() {
@@ -106,27 +109,45 @@ function App() {
   }
 
   return (
-    <div>
-      <button onClick={() => fillDB()}>Fill Database</button>
-      {/* <button onClick={() => fetchOther()}>Pass pagination info</button> */}
+    <Container maxWidth='md'>
+      <Grid container
+        sx={{
+          pt: 4
+        }}
+        spacing={4}
+        direction="column"
+        alignContent="center"
+        justifyContent="center"
+      >
 
-      <FilterPanel
-        handleFilter={handleFilter}
-        user={user}
-        handleChange={handleUserChange}
-        availableUsers={availableUsers}
-      />
+        <Grid item>
+          <InfoPanel fillDB={fillDB} />
+        </Grid>
 
-      <TableComponent
-        data={glucoseData}
-        paginatorData={paginatorData}
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
-        page={page}
-        rowsPerPage={rowsPerPage}
+        <Grid item>
+          <FilterPanel
+            handleFilter={handleFilter}
+            user={user}
+            handleChange={handleUserChange}
+            availableUsers={availableUsers}
+          />
+        </Grid>
 
-      />
-    </div>
+        {user != "None" && glucoseData.length > 0 &&
+          <Grid item>
+            <TableComponent
+              data={glucoseData}
+              paginatorData={paginatorData}
+              handleChangePage={handleChangePage}
+              handleChangeRowsPerPage={handleChangeRowsPerPage}
+              page={page}
+              rowsPerPage={rowsPerPage}
+            />
+          </Grid>
+        }
+
+      </Grid>
+    </Container>
   );
 }
 
