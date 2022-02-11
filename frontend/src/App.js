@@ -133,16 +133,18 @@ function App() {
           />
         </Grid>
 
-        <Grid item>
-          <TableComponent
-            data={glucoseData}
-            paginatorData={paginatorData}
-            handleChangePage={handleChangePage}
-            handleChangeRowsPerPage={handleChangeRowsPerPage}
-            page={page}
-            rowsPerPage={rowsPerPage}
-          />
-        </Grid>
+        {user != "None" && glucoseData.length > 0 &&
+          <Grid item>
+            <TableComponent
+              data={glucoseData}
+              paginatorData={paginatorData}
+              handleChangePage={handleChangePage}
+              handleChangeRowsPerPage={handleChangeRowsPerPage}
+              page={page}
+              rowsPerPage={rowsPerPage}
+            />
+          </Grid>
+        }
 
       </Grid>
     </Container>
