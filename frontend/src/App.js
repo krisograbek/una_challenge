@@ -15,6 +15,8 @@ function App() {
 
   const [user, setUser] = useState('None');
   const [availableUsers, setAvailableUsers] = useState([]);
+  const [orderBy, setOrderBy] = useState("");
+  const [isAscending, setIsAscending] = useState(true);
 
 
   // initial fetch on page load
@@ -43,13 +45,15 @@ function App() {
   // fetch Data on page change
   useEffect(() => {
     fetchData()
-  }, [page])
+  }, [page, orderBy, isAscending])
 
   const fetchData = () => {
     const body = {
       username: user,
       pageNumber: page,
-      rowsPerPage: rowsPerPage
+      rowsPerPage: rowsPerPage,
+      orderBy: orderBy,
+      isAscending: isAscending
     };
     fetch(`/api/v1/level?user=${user}`, {
       method: 'POST',
@@ -70,7 +74,9 @@ function App() {
     const body = {
       username: user,
       pageNumber: page,
-      rowsPerPage: rowsPerPage
+      rowsPerPage: rowsPerPage,
+      orderBy: orderBy,
+      isAscending: isAscending
     };
     fetch(`/api/v1/level?user=${user}`, {
       method: 'POST',
@@ -85,6 +91,17 @@ function App() {
       })
       .catch(error => console.log(error))
   }
+
+  // update Sorting
+  const handleSorting = (sortingElem) => {
+    if (orderBy === sortingElem) {
+      setIsAscending(!isAscending)
+    }
+    else {
+      setIsAscending(true);
+      setOrderBy(sortingElem);
+    }
+  };
 
   // update current page
   const handleChangePage = (event, newPage) => {
@@ -142,6 +159,7 @@ function App() {
               handleChangeRowsPerPage={handleChangeRowsPerPage}
               page={page}
               rowsPerPage={rowsPerPage}
+              handleSorting={handleSorting}
             />
           </Grid>
         }

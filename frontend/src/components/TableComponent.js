@@ -16,7 +16,8 @@ function TableComponent(props) {
     handleChangePage,
     handleChangeRowsPerPage,
     page,
-    rowsPerPage
+    rowsPerPage,
+    handleSorting
   } = props;
 
 
@@ -27,25 +28,23 @@ function TableComponent(props) {
           <TableHead>
             <TableRow>
               <TableCell align="right">User</TableCell>
-              <TableCell align="right">Timestamp</TableCell>
-              <TableCell align="right">Measure Type</TableCell>
-              <TableCell align="right">Glucose Level&nbsp;(mg/dL)</TableCell>
+              <TableCell align="right" onClick={() => handleSorting('timestamp')}>Timestamp</TableCell>
+              <TableCell align="right" onClick={() => handleSorting('measure_type')}>Measure Type</TableCell>
+              <TableCell align="right" onClick={() => handleSorting('glucose_level')}>Glucose Level&nbsp;(mg/dL)</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data
-              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, i) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell align="right">{row.user}</TableCell>
-                  <TableCell align="right">{row.timestamp}</TableCell>
-                  <TableCell align="right">{row.measure_type}</TableCell>
-                  <TableCell align="right">{row.glucose_level}</TableCell>
-                </TableRow>
-              ))}
+            {data.map((row, i) => (
+              <TableRow
+                key={row.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell align="right">{row.user}</TableCell>
+                <TableCell align="right">{row.timestamp}</TableCell>
+                <TableCell align="right">{row.measure_type}</TableCell>
+                <TableCell align="right">{row.glucose_level}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
