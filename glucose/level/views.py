@@ -3,22 +3,66 @@ from .models import Level
 from .serializers import LevelSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 import csv
 import os
 import datetime as dt
+import json
 
 
 class LevelListCreate(generics.ListCreateAPIView):
     serializer_class = LevelSerializer
+    queryset = Level.objects.all()
 
-    def get_queryset(self):
+    def get(self, response):
         queryset = Level.objects.all()
+        # query parameters
         user = self.request.query_params.get("user")
         start = self.request.query_params.get("start")
         stop = self.request.query_params.get("stop")
-        if user is not None:
-            queryset = queryset.filter(user=user)
-        return queryset
+
+        queryset = queryset.filter(user=user)
+
+        returned_data = JsonResponse(
+            {"data": list(queryset.values()), "others": "others"}
+        )
+        return returned_data
+
+    def post(self, request):
+        queryset = Level.objects.all()
+        body_unicode = request.body.decode("utf-8")
+        body = json.loads(body_unicode)
+        print("POST REQUEST", body)
+        rows_per_page = 50
+
+        user = body["username"]
+        page_number = body["pageNumber"] + 1
+
+        if body["rowsPerPage"] is not None:
+            rows_per_page = body["rowsPerPage"]
+        if user is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        print("User", user, page_number, rows_per_page)
+
+        queryset = queryset.filter(user=user)
+        if self.request.query_params.get("per_page"):
+            rows_per_page = self.request.query_params.get("per_page")
+
+        paginator = Paginator(queryset, rows_per_page)
+        print(paginator.count, paginator.num_pages, paginator.page_range)
+        data = paginator.get_page(page_number).object_list
+        paginator_json = {
+            "count": paginator.count,
+            "num_pages": paginator.num_pages,
+        }
+        # print(data)
+        returned_data = JsonResponse(
+            {"data": list(data.values()), "paginator": paginator_json},
+            status=status.HTTP_200_OK,
+        )
+        return returned_data
 
 
 class ResetDatabase(generics.ListAPIView):
