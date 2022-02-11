@@ -1,14 +1,17 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import TableComponent from './components/TableComponent';
+import FilterPanel from './components/FilterPanel';
 
 
 function App() {
-  const [glucoseData, setGlucoseData] = useState([])
+  const [glucoseData, setGlucoseData] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    fetch(`/api/v1/level`).then(res => res.json()).then(data => {
+    fetch(`/api/v1/level?user=None`).then(res => res.json()).then(data => {
       setGlucoseData(data)
+      // console.log(data.data)
     })
   }, [])
 
@@ -23,6 +26,17 @@ function App() {
       .catch(error => console.log(error))
   }
 
+
+  const updateData = (user) => {
+    fetch(`/api/v1/level?user=${user}`).then(res => res.json()).then(data => {
+      setGlucoseData(data)
+      // console.log(data.data)
+    })
+  }
+
+  const handleFilter = (user) => {
+    updateData(user);
+  }
 
   const fetchOther = () => {
     const body = {
@@ -42,39 +56,12 @@ function App() {
 
   return (
     <div>
-      <button onClick={() => fetchData()}>Click</button>
-      <button onClick={() => fetchOther()}>Fetch Something else</button>
+      <button onClick={() => fetchData()}>Fill Database</button>
+      <button onClick={() => fetchOther()}>Pass pagination info</button>
+
+      <FilterPanel handleFilter={handleFilter} />
+
       <TableComponent data={glucoseData} />
-      {/* <table>
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Timestamp</th>
-            <th>Measure Type</th>
-            <th>Glucose Level</th>
-          </tr>
-        </thead>
-        <tbody>
-          {glucoseData.map((value, i) => {
-            return (
-              <tr key={i}>
-                <td>
-                  {value.user}
-                </td>
-                <td>
-                  {value.timestamp}
-                </td>
-                <td>
-                  {value.measure_type}
-                </td>
-                <td>
-                  {value.glucose_level}
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table> */}
     </div>
   );
 }
