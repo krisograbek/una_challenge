@@ -7,9 +7,9 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 function FilterPanel(props) {
-  const { handleFilter, user, handleChange } = props;
+  const { handleFilter, user, handleChange, availableUsers } = props;
 
-  const users = ['None', 'a', 'b', 'c', 'aaa', 'bbb', 'ccc'];
+  // const users = ['None', 'a', 'b', 'c', 'aaa', 'bbb', 'ccc'];
 
   // React.useEffect(() => {
   //   fetch(`/api/v1/level?user=${user}`).then(res => res.json()).then(data => {
@@ -29,7 +29,7 @@ function FilterPanel(props) {
           label="User"
           onChange={handleChange}
         >
-          {users.map((name, i) => {
+          {availableUsers.map((name, i) => {
             return (
               <MenuItem key={name} value={name}>{name}</MenuItem>
             )

@@ -11,16 +11,22 @@ function App() {
   const [page, setPage] = useState(0);
 
   const [user, setUser] = useState('None');
+  const [availableUsers, setAvailableUsers] = useState([]);
 
 
-
+  // initial fetch on page load
   useEffect(() => {
+    console.log("start")
     fetch(`/api/v1/level?user=None`).then(res => res.json()).then(data => {
-      setGlucoseData(data.data)
+      // get glucose data
+      setGlucoseData(data.data);
+      // set available users. Add user None
+      setAvailableUsers(["None"].concat(data.availableUsers));
     })
   }, [])
 
-  const resetDB = () => {
+  // fill DB
+  const fillDB = () => {
     fetch(`/api/v1/level/reset_db/`, {
       method: 'POST',
       headers: {
@@ -31,6 +37,7 @@ function App() {
       .catch(error => console.log(error))
   }
 
+  // fetch Data on page change
   useEffect(() => {
     fetchData()
   }, [page])
@@ -76,49 +83,39 @@ function App() {
       .catch(error => console.log(error))
   }
 
-  const handleUserChange = (event) => {
-    setUser(event.target.value);
-  };
-
-
-
+  // update current page
   const handleChangePage = (event, newPage) => {
     console.log(newPage)
     setPage(newPage);
   };
 
+  // update rows per page
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // update dropdown for users
+  const handleUserChange = (event) => {
+    setUser(event.target.value);
+  };
+
+  // update filter on user change
   const handleFilter = (user) => {
     updateData(user);
   }
 
-  // const fetchOther = () => {
-  //   const body = {
-  //     perPage: 20,
-  //     pages: 5,
-  //     user: "None"
-  //   };
-  //   fetch(`/api/v1/level`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(body)
-  //   })
-  //     .catch(error => console.log(error))
-  // }
-  // console.log(glucoseData.length)
-
   return (
     <div>
-      <button onClick={() => resetDB()}>Fill Database</button>
+      <button onClick={() => fillDB()}>Fill Database</button>
       {/* <button onClick={() => fetchOther()}>Pass pagination info</button> */}
 
-      <FilterPanel handleFilter={handleFilter} user={user} handleChange={handleUserChange} />
+      <FilterPanel
+        handleFilter={handleFilter}
+        user={user}
+        handleChange={handleUserChange}
+        availableUsers={availableUsers}
+      />
 
       <TableComponent
         data={glucoseData}
@@ -127,6 +124,7 @@ function App() {
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
+
       />
     </div>
   );

@@ -24,8 +24,12 @@ class LevelListCreate(generics.ListCreateAPIView):
 
         queryset = queryset.filter(user=user)
 
+        available_users = Level.objects.order_by().values_list("user").distinct()
+        available_users = [u[0] for u in available_users]
+        print(available_users)
+
         returned_data = JsonResponse(
-            {"data": list(queryset.values()), "others": "others"}
+            {"data": list(queryset.values()), "availableUsers": list(available_users)}
         )
         return returned_data
 
