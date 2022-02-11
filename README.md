@@ -29,3 +29,7 @@
 `(venv) $ python manage.py runserver`
 
 ## Go to `localhost:8000` in your browser
+
+## Demo
+
+[Watch demo](https://user-images.githubusercontent.com/48050596/153604786-9ca4c015-64d1-4415-aeb0-e1b804c9e31d.mp4)
