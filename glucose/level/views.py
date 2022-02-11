@@ -10,6 +10,8 @@ import os
 import datetime as dt
 import json
 
+SORTING_COLUMNS = ["timestamp", "measure_type", "glucose_level"]
+
 
 class LevelListCreate(generics.ListCreateAPIView):
     serializer_class = LevelSerializer
@@ -26,7 +28,6 @@ class LevelListCreate(generics.ListCreateAPIView):
 
         available_users = Level.objects.order_by().values_list("user").distinct()
         available_users = [u[0] for u in available_users]
-        print(available_users)
 
         returned_data = JsonResponse(
             {"data": list(queryset.values()), "availableUsers": list(available_users)}
@@ -34,29 +35,45 @@ class LevelListCreate(generics.ListCreateAPIView):
         return returned_data
 
     def post(self, request):
+        # init queryset
         queryset = Level.objects.all()
+        # read body
         body_unicode = request.body.decode("utf-8")
         body = json.loads(body_unicode)
-        print("POST REQUEST", body)
+
+        # default rows per page
         rows_per_page = 50
 
+        # get user for filtering
         user = body["username"]
-        page_number = body["pageNumber"] + 1
-
-        if body["rowsPerPage"] is not None:
-            rows_per_page = body["rowsPerPage"]
+        # user must be provided
         if user is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        print("User", user, page_number, rows_per_page)
+        # get page number
+        # +1 because JS begins with 0
+        page_number = body["pageNumber"] + 1
 
+        # update rows per page
+        if body["rowsPerPage"] is not None:
+            rows_per_page = body["rowsPerPage"]
+
+        # filter by user
         queryset = queryset.filter(user=user)
-        if self.request.query_params.get("per_page"):
-            rows_per_page = self.request.query_params.get("per_page")
 
+        # prepare ordering
+        if body["orderBy"] in SORTING_COLUMNS:
+            order_by = body["orderBy"]
+            # change direction if descending
+            if body["isAscending"] == False:
+                order_by = "-" + order_by
+            queryset = queryset.order_by(order_by)
+
+        # init paginator
         paginator = Paginator(queryset, rows_per_page)
-        print(paginator.count, paginator.num_pages, paginator.page_range)
+        # get data
         data = paginator.get_page(page_number).object_list
+        # prepare json for paginator data
         paginator_json = {
             "count": paginator.count,
             "num_pages": paginator.num_pages,

@@ -13,6 +13,9 @@ function InfoPanel(props) {
         <Typography variant='h4'>
           Table of Glucose Levels
         </Typography>
+        <Typography variant='h6'>
+          Supports filtering by user, pagination, and sorting
+        </Typography>
         <Button variant="contained" onClick={fillDB}>Fill Database</Button>
       </Paper>
     </Box>
