@@ -10,8 +10,7 @@ function App() {
 
   useEffect(() => {
     fetch(`/api/v1/level?user=None`).then(res => res.json()).then(data => {
-      setGlucoseData(data)
-      // console.log(data.data)
+      setGlucoseData(data.data)
     })
   }, [])
 
@@ -28,10 +27,10 @@ function App() {
 
 
   const updateData = (user) => {
-    fetch(`/api/v1/level?user=${user}`).then(res => res.json()).then(data => {
-      setGlucoseData(data)
-      // console.log(data.data)
-    })
+    fetch(`/api/v1/level?user=${user}`)
+      .then(res => res.json()).then(data => {
+        setGlucoseData(data.data)
+      })
   }
 
   const handleFilter = (user) => {

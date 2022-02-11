@@ -10,7 +10,7 @@ function FilterPanel(props) {
   const [user, setUser] = React.useState('None');
   const { handleFilter } = props;
 
-  const users = ['None', 'a', 'b', 'c'];
+  const users = ['None', 'a', 'b', 'c', 'aaa', 'bbb', 'ccc'];
 
   // React.useEffect(() => {
   //   fetch(`/api/v1/level?user=${user}`).then(res => res.json()).then(data => {
