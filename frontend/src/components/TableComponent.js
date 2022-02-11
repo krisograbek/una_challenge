@@ -8,19 +8,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-function TableComponent({ data }) {
+function TableComponent(props) {
 
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [page, setPage] = useState(0);
+  const {
+    data,
+    paginatorData,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    page,
+    rowsPerPage
+  } = props;
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   return (
     <Paper>
@@ -36,7 +34,7 @@ function TableComponent({ data }) {
           </TableHead>
           <TableBody>
             {data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, i) => (
                 <TableRow
                   key={row.id}
@@ -54,7 +52,7 @@ function TableComponent({ data }) {
       <TablePagination
         rowsPerPageOptions={[10, 25, 50]}
         component="div"
-        count={data.length}
+        count={paginatorData.count}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

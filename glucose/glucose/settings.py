@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ["*"]
 # USE_L10N = False
 # USE_TZ = False
 
+APPEND_SLASH = False
+
 
 # Application definition
 

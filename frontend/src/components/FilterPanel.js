@@ -7,8 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 function FilterPanel(props) {
-  const [user, setUser] = React.useState('None');
-  const { handleFilter } = props;
+  const { handleFilter, user, handleChange } = props;
 
   const users = ['None', 'a', 'b', 'c', 'aaa', 'bbb', 'ccc'];
 
@@ -18,9 +17,6 @@ function FilterPanel(props) {
   //   })
   // }, [])
 
-  const handleChange = (event) => {
-    setUser(event.target.value);
-  };
 
   return (
     <Box >
